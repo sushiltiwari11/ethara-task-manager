@@ -3,12 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String    @id @default(uuid())
+  id        String    @id @default(uuid()) @map("_id")
   name      String
   email     String    @unique
   password  String
@@ -19,7 +19,7 @@ model User {
 }
 
 model Project {
-  id          String        @id @default(uuid())
+  id          String        @id @default(uuid()) @map("_id")
   title       String
   description String?
   status      ProjectStatus @default(ACTIVE)
@@ -30,7 +30,7 @@ model Project {
 }
 
 model Task {
-  id          String     @id @default(uuid())
+  id          String     @id @default(uuid()) @map("_id")
   title       String
   description String?
   status      TaskStatus @default(TODO)
