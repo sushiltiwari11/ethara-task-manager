@@ -9,23 +9,23 @@ const taskRoutes = require('./routes/taskRoutes');
 
 const app = express();
 
-// 1. Live Request Logger (Isse Render logs me har ek incoming request saaf dikhegi)
+// 1. Live Request Logger
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} request received at: ${req.url}`);
   next();
 });
 
-// 2. Helmet (Cross-Origin Policy ko allow kiya taaki API block na ho)
+// 2. Helmet Configuration (CORS friendly)
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
-// 3. Bulletproof CORS Setup
-const allowedOrigin = 'https://ethara-task-manager-nine.vercel.app';
+// 3. Dynamic CORS Setup (Ab localhost ho ya vercel, sab par bina jhanjhat chalega)
 app.use(cors({
-  origin: allowedOrigin,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: (origin, callback) => {
+    // Yeh automatic har incoming origin ko allow karega aur credentials bhee support karega
+    callback(null, true);
+  },
   credentials: true,
   optionsSuccessStatus: 204
 }));
@@ -41,19 +41,11 @@ app.use('/api/tasks', taskRoutes);
 // Health Check
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
-// 6. Global Error Handler (With Explicit CORS Fallback Headers)
+// 6. Global Error Handler
 app.use((err, req, res, next) => {
   console.error("❌ Backend Error Caught:", err.message || err);
-  
-  // Agar code crash bhi ho, tab bhi CORS header jana chahiye taaki asli error dikhe
-  res.header('Access-Control-Allow-Origin', allowedOrigin);
-  res.header('Access-Control-Allow-Credentials', 'true');
-  
-  res.status(err.status || 500).json({ 
-    error: err.message || 'Internal Server Error' 
-  });
+  res.status(err.status || 500).json({ error: err.message || 'Internal Server Error' });
 });
 
-// Render hamesha port 10000 prefer karta hai
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running successfully on port ${PORT}`));
