@@ -9,7 +9,12 @@ const taskRoutes = require('./routes/taskRoutes');
 
 const app = express();
 app.use(helmet());
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({
+  origin: 'https://ethara-task-manager-nine.vercel.app', // Aapka exact Vercel URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
