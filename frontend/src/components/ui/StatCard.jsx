@@ -7,14 +7,14 @@ export default function StatCard({ title, value, color, icon }) {
   };
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-sm font-medium text-gray-500">{title}</span>
-        <span className={`w-10 h-10 rounded-lg flex items-center justify-center text-xl ${colors[color]}`}>
+    <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col justify-between">
+      <div className="flex items-start justify-between gap-2 mb-2 sm:mb-4">
+        <span className="text-xs sm:text-sm font-medium text-gray-500 line-clamp-2">{title}</span>
+        <span className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-lg sm:text-xl shrink-0 ${colors[color]}`}>
           {icon}
         </span>
       </div>
-      <p className="text-3xl font-bold text-gray-900">{value}</p>
+      <p className="text-2xl sm:text-3xl font-bold text-gray-900 mt-auto">{value}</p>
     </div>
   );
 }
