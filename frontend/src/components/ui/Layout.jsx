@@ -7,7 +7,7 @@ export default function Layout({ children }) {
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
       
-      {/* Mobile Header: Sirf mobile screens par dikhega */}
+      {/* Mobile Header */}
       <div className="flex md:hidden items-center justify-between bg-[#0f172a] text-white px-4 py-3 shadow-md z-50">
         <div className="flex items-center gap-2">
           <span className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-sm">E</span>
@@ -27,16 +27,16 @@ export default function Layout({ children }) {
         </button>
       </div>
 
-      {/* Sidebar Wrapper: Mobile par drawer banega, Desktop par static rahega */}
+      {/* FIXED SIDEBAR WRAPPER: Added w-64 and shrink-0 to fix desktop alignment */}
       <div className={`
-        fixed md:static inset-y-0 left-0 z-40 
+        fixed md:static inset-y-0 left-0 z-40 w-64 shrink-0 bg-[#0f172a]
         transition-transform duration-300 ease-in-out md:transition-none
         ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
         <Sidebar />
       </div>
 
-      {/* Backdrop Overlay: Mobile par jab sidebar khulega toh baki screen dark ho jayegi */}
+      {/* Backdrop Overlay for mobile */}
       {isOpen && (
         <div 
           className="fixed inset-0 bg-black/40 z-30 md:hidden" 

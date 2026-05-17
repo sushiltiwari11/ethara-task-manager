@@ -18,21 +18,30 @@ export default function Dashboard() {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
+        
+        // Fires all requests simultaneously
         const [projectsRes, tasksRes] = await Promise.all([
           api.get('/projects'),
           api.get('/tasks')
         ]);
-        // Agar data set karna ho toh un-comment karein:
-        // setProjects(projectsRes.data.projects);
-        // setTasks(tasksRes.data.tasks);
+
+        // FIX: In lines ko uncomment kar diya hai aur safe check laga diya hai
+        // Agar backend direct array deta hai ya object ke andar array deta hai, dono handle ho jayenge:
+        const projectsData = projectsRes.data.projects || projectsRes.data || [];
+        const tasksData = tasksRes.data.tasks || tasksRes.data || [];
+
+        setProjects(projectsData);
+        setTasks(tasksData);
+        
       } catch (error) {
         console.error("Dashboard loading failed:", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchDashboardData();
-  }, []); 
+  }, []);
 
   const totalTasks = tasks.length;
   const doneTasks = tasks.filter(t => t.status === 'DONE').length;
